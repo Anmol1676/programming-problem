@@ -171,7 +171,7 @@ app.post('/login',(req,res)=>{
 app.post('/channels', (req, res) => {
     const name = req.body.name;
   
-    dp.query('INSERT INTO channels (name) VALUES (?)', [name], (err, results) => {
+    db.query('INSERT INTO channels (name) VALUES (?)', [name], (err, results) => {
       if (err) {
         console.log(err);
         res.status(500).send('Error creating channel');
@@ -183,7 +183,7 @@ app.post('/channels', (req, res) => {
 
 //GET channel (show all the channels)
 app.get('/channels', (req, res) => {
-    dp.query('SELECT * FROM channels', (err, results) => {
+    db.query('SELECT * FROM channels', (err, results) => {
       if (err) {
         console.log(err);
         res.status(500).send('Error fetching channels');
@@ -200,7 +200,7 @@ app.post('/channels/:channelId/posts', (req, res) => {
     const content = req.body.content;
     const author = req.body.author;
   
-    dp.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?)', [content, author, channelId], (err, results) => {
+    db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?)', [content, author, channelId], (err, results) => {
         if (err) {
           console.log(err);
           res.status(500).send('Error creating post');
@@ -215,7 +215,7 @@ app.post('/channels/:channelId/posts', (req, res) => {
 //GET post (get the post made)
 app.get('/channels/:channelId/posts', (req, res) => {
     const channelId = req.params.channelId;
-    dp.query('SELECT * FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
+    db.query('SELECT * FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
       if (err) {
         console.log(err);
         res.status(500).send('Error fetching posts');
@@ -226,7 +226,7 @@ app.get('/channels/:channelId/posts', (req, res) => {
         let fetchedPostCount = 0;
   
         fetchedPosts.forEach((post, index) => {
-          dp.query('SELECT * FROM comments WHERE post_id = ?', [post.id], (err, comments) => {
+          db.query('SELECT * FROM comments WHERE post_id = ?', [post.id], (err, comments) => {
             if (err) {
               console.log(err);
               res.status(500).send('Error fetching comments');
