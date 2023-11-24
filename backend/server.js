@@ -23,40 +23,36 @@ db.connect((err) => {
         console.error('Error connecting to the database:', err);
         if (err.code === 'ECONNREFUSED') {
             console.error('Database connection refused. Exiting application.');
-            process.exit(1); // Exit with a failure code
+            process.exit(1);
         }
-    }else
-    {
+    } else {
         console.log('Connected to the database.');
-        createDatabase();
+
+        // Create the database
+        db.query("CREATE DATABASE IF NOT EXISTS issues", (err, result) => {
+            if (err) {
+              console.log("Error creating database", err);
+              return;
+            }
+            console.log("Database 'issues' created/checked");
+
+            // Use the database
+            db.query("USE issues", (err, result) => {
+              if (err) {
+                console.log("Error selecting database 'issues'", err);
+                return;
+              }
+              console.log("Using the database 'issues'");
+
+              // Create tables
+              createUserTable();
+              createChannelsTable();
+              createPostsTable();
+              createCommentsTable();
+            });
+        });
     }
-}); 
-
-db.createDatabase((err)=>{
-    // create database issues 
-    db.qurey("CREATE DATABASE IF NOT EXISTS issues", (err,result)=>{
-        if(err){
-            console.log("error creating database", err);
-            return;
-        }console.log("database was created ");
-        
-    });
-
-    db.qurey("USE issues",(err,result)=> {
-        if(err){
-            console.log("not able to use issues", err);
-            return;
-        }
-        console.log("using the database issues");
-    });
-
-    createUserTable();
-    createChannelsTable();
-    createPostsTable();
-    createCommentsTable();
-
 });
-
 
 //create user table 
 // need a ranking system
@@ -75,7 +71,7 @@ function createUserTable() {
 
 //create channel table 
 function createChannelsTable() {
-    dp.query(
+    db.query(
       `CREATE TABLE IF NOT EXISTS channels (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE)`,
       (err, results) => {
         if (err) {
@@ -90,7 +86,7 @@ function createChannelsTable() {
 
 //create post table 
 function createPostsTable() {
-    dp.query(
+    db.query(
     `CREATE TABLE IF NOT EXISTS posts (
       id INT AUTO_INCREMENT PRIMARY KEY,
         content TEXT NOT NULL,
@@ -113,7 +109,7 @@ function createPostsTable() {
 
 //create Comments table 
 function createCommentsTable() {
-  dp.query('CREATE TABLE IF NOT EXISTS comments (id INT NOT NULL AUTO_INCREMENT,content TEXT NOT NULL, author VARCHAR(255) NOT NULL, post_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (post_id) REFERENCES posts(id)) ENGINE=InnoDB', (err, results) => {
+  db.query('CREATE TABLE IF NOT EXISTS comments (id INT NOT NULL AUTO_INCREMENT,content TEXT NOT NULL, author VARCHAR(255) NOT NULL, post_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (post_id) REFERENCES posts(id)) ENGINE=InnoDB', (err, results) => {
     if (err) {
       console.log(err);
     } else {
@@ -172,28 +168,85 @@ app.post('/login',(req,res)=>{
 
 
 //POST channel (add new channel)
-    //TODO
-
-
-//DELETE channel (the admin can delete channels)
-    //TODO
-
+app.post('/channels', (req, res) => {
+    const name = req.body.name;
+  
+    dp.query('INSERT INTO channels (name) VALUES (?)', [name], (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error creating channel');
+      } else {
+        res.status(201).send('Channel created successfully');
+      }
+    });
+});
 
 //GET channel (show all the channels)
-    //TODO
+app.get('/channels', (req, res) => {
+    dp.query('SELECT * FROM channels', (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error fetching channels');
+      } else {
+        res.status(200).json(results);
+      }
+    });
+});
 
 
 //POST post (make new posts in the a given channel )
-    //TODO
+app.post('/channels/:channelId/posts', (req, res) => {
+    const channelId = req.params.channelId;
+    const content = req.body.content;
+    const author = req.body.author;
+  
+    dp.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?)', [content, author, channelId], (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send('Error creating post');
+        } else {
+          res.status(201).send('Post created successfully');
+        }
+    });
+  });
 
-
-//DELETE post ( the admin can delete post)
-    //TODO
 
 
 //GET post (get the post made)
-    //TODO
-
+app.get('/channels/:channelId/posts', (req, res) => {
+    const channelId = req.params.channelId;
+    dp.query('SELECT * FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error fetching posts');
+      } else {
+        // Fetch comments for each post and include them in the response
+        let fetchedPosts = results;
+        let postCount = fetchedPosts.length;
+        let fetchedPostCount = 0;
+  
+        fetchedPosts.forEach((post, index) => {
+          dp.query('SELECT * FROM comments WHERE post_id = ?', [post.id], (err, comments) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send('Error fetching comments');
+            } else {
+              fetchedPosts[index] = { ...post, comments };
+              fetchedPostCount++;
+  
+              if (fetchedPostCount === postCount) {
+                res.status(200).json(fetchedPosts);
+              }
+            }
+          });
+        });
+  
+        if (postCount === 0) {
+          res.status(200).json([]);
+        }
+      }
+    });
+  });
 
 //POST reply (make new reply and make nested reply to post made on the channel)
     //TODO

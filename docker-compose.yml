@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql2:
+    container_name: db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: asdf1234
+    volumes:
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    depends_on:
+      mysql2:
+        condition: service_started
+    restart: on-failure  # Restart policy set to on-failure
+    command: node server.js
+
+  frontend:
+    build:
+      context: ./Frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+    command: npm start
+
+volumes:
+  mysql-data:
