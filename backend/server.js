@@ -152,7 +152,22 @@ app.post('/regitration', (req,res)=>{
 
 
 //login
-    //TODO
+app.post('/login',(req,res)=>{
+    const username = req.body.username;
+    const password = req.body.password; 
+    db.query('SELECT * FROM users WHERE username=? AND password= ? ', [username, password], (error,result)=>{
+        if(error){
+            res.send(err);
+            res.status(500).send('unable to login');
+        } else if(results.length === 0) { // no user found with the given credentials
+            console.log('Invalid username or password');
+            res.status(401).send('Invalid username or password');
+        } else { // user found, login successful
+            console.log('Login successful'); 
+            res.status(200).send('Login successful');
+        }
+    });
+});
 
 
 
