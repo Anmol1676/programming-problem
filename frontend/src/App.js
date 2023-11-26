@@ -1,15 +1,20 @@
 import './App.css';
 
 import Nav from './pages/Nav/nav';
+import navBar from './NavBar/navBar';
 import Home from './pages/Home/home';
 import Login from './pages/Login/login';
 import Registration from './pages/Registration/registration';
-import Post from './pages/Post/post'
+import Channel from './pages/ChannelLanding/chanelLanding'; 
+
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 function App() {
+// add login variable 
+
+
   return (
     <Router>
       <div className="App">
@@ -20,9 +25,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
-            <Route path="/post" element={<Post />} />
 
-            
             {/*<Route path="/" element={< />} /> */}
           </Routes>
         </header>

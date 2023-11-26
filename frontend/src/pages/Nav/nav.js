@@ -17,8 +17,7 @@ function nav() {
             {/* Bottom row for navigation buttons */}
             <div className="navbar-nav">
                 <Link to='/' className="home">Home</Link>
-                <Link to='/post' className="Post">Post</Link>
-                <Link to='/search' className="search">Search</Link>
+
             </div>
         </nav>
     );

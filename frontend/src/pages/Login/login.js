@@ -1,19 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
+import Axios from 'axios';
+import ChannelLanding from '../ChannelLanding/chanelLanding'
 
-function login(){
-    return(
-        <section>
-            <div class="container-fluid">
-                <h1 class ="mt-5">
-                    Welcome
-                </h1>
-                <p>
-                    this the Login page 
-                </p>
+function Login(){
+    const [loginUsername, SetLoginUsername] = useState("");
+    const [loginPassword, SetLoginPassword] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const login = () => {
+        Axios.post('http://localhost:4000/login',{
+            username: loginUsername,
+            password: loginPassword
+        }).then((respond)=>{
+            console.log(respond);
+            if(respond.data === "Login successful"){
+                window.alert("Login successful!!!! :D");
+            }else{
+                window.alert("Login Failed")
+            }
+
+        });
+    }
+
+    if (!isLoggedIn) {
+        return (
+          <div className="App">
+      
+            {/* Login */}
+            <div className="login">
+              <h1>Login</h1>
+              <label>Username</label>
+              <input
+                type="text"
+                value={loginUsername}
+                onChange={(e) => {
+                    SetLoginUsername(e.target.value);
+                }}
+              />
+      
+              <label>Password</label>
+              <input
+                type="password"
+                value={loginPassword}
+                onChange={(e) => {
+                    SetLoginPassword(e.target.value);
+                }}
+              />
+              <button onClick={login}>Login</button>
             </div>
-        </section>
-    );
-}
+      
+          </div>
+        );
+      } else {
+        return (
+          <div className="App">
+            <ChannelLanding loginUsername={loginUsername}/>
+            
+        </div>
+    
+        );
+      }
+    }
 
-export default login;
+export default Login;

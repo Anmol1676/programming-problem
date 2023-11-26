@@ -1,0 +1,32 @@
+.navbar {
+    position: fixed; /* Fix the navbar to the top of the screen */
+    top: 0; /* Align the navbar to the top */
+    left: 0; /* Align the navbar to the left */
+    width: 100%; /* Ensure the navbar spans the full width of the screen */
+    background-color: #ffffff; /* Dark blue background */
+    z-index: 1030; /* Higher z-index to ensure it stays on top of other content */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    flex-direction: column;
+}
+
+/* Top row styling */
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.5rem; /* Space between top row and navigation buttons */
+}
+
+/* Style for the company name */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
