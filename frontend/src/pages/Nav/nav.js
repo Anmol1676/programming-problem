@@ -18,6 +18,7 @@ function nav() {
             <div className="navbar-nav">
                 <Link to='/' className="home">Home</Link>
 
+
             </div>
         </nav>
     );

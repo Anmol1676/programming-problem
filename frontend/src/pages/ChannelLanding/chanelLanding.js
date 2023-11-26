@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import './channels.css';
-
+import { useNavigate } from 'react-router-dom';
 
 const Home = ({ loginUsername }) => {
   const [channels, setChannels] = useState([]);
@@ -9,6 +9,7 @@ const Home = ({ loginUsername }) => {
   const [showFeed, setShowFeed] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchChannels();
@@ -45,9 +46,10 @@ const Home = ({ loginUsername }) => {
   };
 
   const joinChannel = (channelId) => {
-      setShowFeed(true);
-      setSelectedChannelId(channelId);
-  };
+    setShowFeed(true);
+    setSelectedChannelId(channelId);
+    navigate(`/channel/${channelId}/posts`); // Navigate to the posts page
+};
 
 
 

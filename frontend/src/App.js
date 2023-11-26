@@ -1,32 +1,35 @@
-import './App.css';
-
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Nav from './pages/Nav/nav';
-import navBar from './NavBar/navBar';
+import NavBar from './NavBar/navBar'; // Corrected component name
 import Home from './pages/Home/home';
 import Login from './pages/Login/login';
 import Registration from './pages/Registration/registration';
-import Channel from './pages/ChannelLanding/chanelLanding'; 
-
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-
+import Channel from './pages/ChannelLanding/chanelLanding';
+import Posts from './pages/Post/post';
 function App() {
-// add login variable 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = (status) => {
+    setIsLoggedIn(status);
+  };
 
 
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          <Nav />
-          {/* this will route us to the page */}
+          {isLoggedIn ? <NavBar /> : <Nav />} {/* Conditional rendering */}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/registration" element={<Registration />} />
+            {isLoggedIn && <Route path="/channel" element={<Channel />} />}
+            {isLoggedIn && <Route path="/channel/:channelId/posts" element={<Posts />} />}
 
-            {/*<Route path="/" element={< />} /> */}
+          
+
+            {/* Add other routes as needed */}
           </Routes>
         </header>
       </div>

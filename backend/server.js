@@ -198,7 +198,7 @@ app.post('/channels/:channelId/posts', (req, res) => {
     const content = req.body.content;
     const author = req.body.author;
   
-    db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?)', [content, author, channelId], (err, results) => {
+    db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?, 0)', [content, author, channelId], (err, results) => {
         if (err) {
           console.log(err);
           res.status(500).send('Error creating post');
@@ -206,7 +206,7 @@ app.post('/channels/:channelId/posts', (req, res) => {
           res.status(201).send('Post created successfully');
         }
     });
-  });
+});
 
 
 

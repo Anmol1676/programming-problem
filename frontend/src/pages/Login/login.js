@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from 'axios';
 import ChannelLanding from '../ChannelLanding/chanelLanding'
 
-function Login(){
+function Login({onLogin}){
     const [loginUsername, SetLoginUsername] = useState("");
     const [loginPassword, SetLoginPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,12 +15,17 @@ function Login(){
             console.log(respond);
             if(respond.data === "Login successful"){
                 window.alert("Login successful!!!! :D");
+                onLogin(true);
             }else{
                 window.alert("Login Failed")
             }
 
         });
     }
+    const loginSuccess = () => {
+        // After successful login
+        onLogin(true);
+      };
 
     if (!isLoggedIn) {
         return (
@@ -55,6 +60,7 @@ function Login(){
         return (
           <div className="App">
             <ChannelLanding loginUsername={loginUsername}/>
+            
             
         </div>
     
