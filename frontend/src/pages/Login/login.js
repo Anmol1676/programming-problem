@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import ChannelLanding from '../ChannelLanding/chanelLanding'
+import ChannelLanding from '../ChannelLanding/chanelLanding';
+import { useNavigate } from 'react-router-dom';
 
 function Login({onLogin}){
+  const navigate = useNavigate();
     const [loginUsername, SetLoginUsername] = useState("");
     const [loginPassword, SetLoginPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,11 +18,16 @@ function Login({onLogin}){
             if(respond.data === "Login successful"){
                 window.alert("Login successful!!!! :D");
                 onLogin(true);
+                navigate('/Channel');
             }else{
                 window.alert("Login Failed")
             }
 
-        });
+        }).catch((error) => {
+          // It's also a good practice to handle network or server errors
+          console.error("Error during login", error);
+          window.alert("Login Failed - Error occurred");
+      });
     }
     const loginSuccess = () => {
         // After successful login
@@ -52,6 +59,8 @@ function Login({onLogin}){
                 }}
               />
               <button onClick={login}>Login</button>
+
+              
             </div>
       
           </div>
@@ -60,7 +69,7 @@ function Login({onLogin}){
         return (
           <div className="App">
             <ChannelLanding loginUsername={loginUsername}/>
-            
+
             
         </div>
     

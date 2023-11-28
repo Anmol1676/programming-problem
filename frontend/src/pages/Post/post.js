@@ -8,9 +8,6 @@ const Posts = ({ channelId }) => {
   const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState('');
 
-  const [commits, SetCommit] = useState([]);
-  const [newCommitContents, setNewCommitContents] = useState('');
-
   // Fetch posts when the component mounts or channelId changes
   useEffect(() => {
     fetchPosts();

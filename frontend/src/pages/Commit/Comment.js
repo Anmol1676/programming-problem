@@ -22,9 +22,6 @@ const Comment = ({ postId, loginUsername }) => {
     fetchComments();
   }, [fetchComments]);
 
-  
-
-
 
   const addComment = async (e) => {
     e.preventDefault();
@@ -52,6 +49,7 @@ const Comment = ({ postId, loginUsername }) => {
 
   return (
     <div>
+        
       <input
         type="text"
         value={newComment}
@@ -69,6 +67,8 @@ const Comment = ({ postId, loginUsername }) => {
           </li>
         ))}
       </ul>
+
+      
     </div>
   );
 };
