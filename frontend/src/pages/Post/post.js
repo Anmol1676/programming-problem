@@ -2,17 +2,19 @@
 // ./pages/Post/post.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import Comment from '../Commit/Comment';
 
 const Posts = ({ channelId }) => {
-    console.log("Channel ID in Posts component:", channelId);
   const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState('');
+
+  const [commits, SetCommit] = useState([]);
+  const [newCommitContents, setNewCommitContents] = useState('');
 
   // Fetch posts when the component mounts or channelId changes
   useEffect(() => {
     fetchPosts();
   }, [channelId]);
-
 
 
   const fetchPosts = useCallback(async () => {
@@ -26,14 +28,14 @@ const Posts = ({ channelId }) => {
 
 
 
-
+  
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
+  //make new post 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    console.log("Channel ID being sent in request:", channelId); // Add this line
     if (!channelId) {
       console.error('Channel ID is undefined');
       return;
@@ -49,6 +51,13 @@ const Posts = ({ channelId }) => {
       console.error('Error submitting post:', error);
     }
   };
+
+  //handel like
+  const handellike = async (e) => {
+
+  };
+
+
 
   return (
     <div>
@@ -66,7 +75,7 @@ const Posts = ({ channelId }) => {
         {posts.map(post => (
           <li key={post.id}>
             <p>{post.content}</p>
-            {/* Optional: Display comments here */}
+            <Comment postId={post.id} />
           </li>
         ))}
       </ul>

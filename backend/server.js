@@ -49,6 +49,7 @@ db.connect((err) => {
               createChannelsTable();
               createPostsTable();
               createCommentsTable();
+              //createAdminUser()
             });
         });
     }
@@ -63,6 +64,7 @@ function createUserTable() {
         if (err) {
           console.log(err);
         } else {
+          
           console.log("Users table created/checked");
         }
       }
@@ -117,6 +119,8 @@ function createCommentsTable() {
     }
   });
 };
+
+
 
 
 //regitration 
@@ -191,12 +195,18 @@ app.get('/channels', (req, res) => {
     });
 });
 
+//DELETE Channels 
+
+
+
+
 
 //POST post (make new posts in the a given channel )
 app.post('/channels/:channelId/posts', (req, res) => {
   const channelId = req.params.channelId;
   const content = req.body.content;
   const author = req.body.author;
+
   console.log("Received channelId on backend:", req.params.channelId);
 
   if (!channelId) {
@@ -255,8 +265,50 @@ app.get('/channels/:channelId/posts', (req, res) => {
     });
   });
 
+  //DELETE Post 
+
+  // add like and dislike to the post 
+
+  
+
 //POST reply (make new reply and make nested reply to post made on the channel)
-    //TODO
+app.post('/posts/:postId/comments', (req, res) => {
+  const postId = req.params.postId;
+  const content = req.body.content;
+  const author = req.body.author;
+
+  if (!content) {
+    return res.status(400).send('Comment content cannot be empty');
+  }
+
+  db.query('INSERT INTO comments (content, author, post_id) VALUES (?, ?, ?)', [content, author, postId], (err, insertResults) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error creating comment');
+    } else {
+      res.status(201).send('Comment created successfully');
+  
+      // emit new comment event to the post's channel
+      const channelIdQuery = 'SELECT channel_id FROM posts WHERE id = ?';
+      const commentId = insertResults.insertId; // Store the insertId from the previous query
+      db.query(channelIdQuery, [postId], (err, channelIdResults) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const channelId = channelIdResults[0].channel_id;
+          io.to(channelId).emit('new comment', {
+            id: commentId, // Use the stored insertId here
+            content,
+            author,
+            post_id: postId,
+          });
+        }
+      });
+    }
+  });
+});
+
+
 
 
 //DELETE reply ( the admin can delete replay)
@@ -264,7 +316,18 @@ app.get('/channels/:channelId/posts', (req, res) => {
 
 
 //GET reply (get the replys made)
-    //TODO
+app.get('/posts/:postId/comments', (req, res) => {
+  const postId = req.params.postId;
+
+  db.query('SELECT * FROM comments WHERE post_id = ?', [postId], (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error fetching comments');
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
 
 
 //search by string (search the post table)

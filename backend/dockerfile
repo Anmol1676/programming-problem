@@ -12,6 +12,7 @@ RUN npm install
 RUN npm install mysql
 RUN npm add cors
 RUN npm add mysql2
+RUN npm add multer
 # Copy the rest of the application code to the container
 COPY . .
 
