@@ -194,25 +194,34 @@ app.get('/channels', (req, res) => {
 
 //POST post (make new posts in the a given channel )
 app.post('/channels/:channelId/posts', (req, res) => {
-    const channelId = req.params.channelId;
-    const content = req.body.content;
-    const author = req.body.author;
+  const channelId = req.params.channelId;
+  const content = req.body.content;
+  const author = req.body.author;
+  console.log("Received channelId on backend:", req.params.channelId);
+
+  if (!channelId) {
+    res.status(400).send('Channel ID is undefined');
+    return;
+  }
   
-    db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?, 0)', [content, author, channelId], (err, results) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send('Error creating post');
-        } else {
-          res.status(201).send('Post created successfully');
-        }
-    });
+
+  db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?, 0)', [content, author, channelId], (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error creating post');
+      } else {
+        res.status(201).send('Post created successfully');
+      }
+  });
 });
+
 
 
 
 //GET post (get the post made)
 app.get('/channels/:channelId/posts', (req, res) => {
     const channelId = req.params.channelId;
+    console.log(req.params);
     db.query('SELECT * FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
       if (err) {
         console.log(err);

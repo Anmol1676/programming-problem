@@ -26,6 +26,7 @@ function App() {
             <Route path="/registration" element={<Registration />} />
             {isLoggedIn && <Route path="/channel" element={<Channel />} />}
             {isLoggedIn && <Route path="/channel/:channelId/posts" element={<Posts />} />}
+           
 
           
 

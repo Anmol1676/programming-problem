@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import './channels.css';
-import { useNavigate } from 'react-router-dom';
+// import './channels.css';
+import Feed from '../Post/post';
 
-const Home = ({ loginUsername }) => {
+const ChannelPage = ({ loginUsername }) => {
   const [channels, setChannels] = useState([]);
   const [channelName, setChannelName] = useState('');
   const [showFeed, setShowFeed] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchChannels();
@@ -18,13 +17,11 @@ const Home = ({ loginUsername }) => {
   const fetchChannels = async () => {
     try {
       const response = await axios.get('http://localhost:4000/channels');
-      console.log(response.data); // Log the response data
       setChannels(response.data);
     } catch (error) {
       console.error('Error fetching channels:', error);
     }
   };
-  
 
   const createChannel = async () => {
     try {
@@ -48,24 +45,24 @@ const Home = ({ loginUsername }) => {
   const joinChannel = (channelId) => {
     setShowFeed(true);
     setSelectedChannelId(channelId);
-    navigate(`/channel/${channelId}/posts`); // Navigate to the posts page
-};
-
+  };
 
 
   return (
     <div className="channel-page">
+      {!showFeed && !showSearch ? (
         <div className="channels-container">
           <h1>Channels</h1>
+          
           <ul>
             {channels.map((channel) => (
               <li key={channel.id}>
-              {channel.name}
-              <button onClick={() => joinChannel(channel.id)}>Join</button>
-              {loginUsername === 'admin' && (
-                <button onClick={() => deleteChannel(channel.name)}>Delete</button>
-              )}
-            </li>
+                {channel.name}
+                <button onClick={() => joinChannel(channel.id)}>Join</button>
+                {loginUsername === 'admin' && (
+                  <button onClick={() => deleteChannel(channel.name)}>Delete</button>
+                )}
+              </li>
             ))}
           </ul>
           <div className="create-channel">
@@ -78,9 +75,15 @@ const Home = ({ loginUsername }) => {
             <button onClick={createChannel}>Create Channel</button>
           </div>
         </div>
+      ) : (
+        showFeed && (
+          <>
+            <Feed channelId={selectedChannelId} loginUsername={loginUsername} />
+          </>
+        )
+      )}
     </div>
   );
-
 };
 
-export default Home;
+export default ChannelPage;
