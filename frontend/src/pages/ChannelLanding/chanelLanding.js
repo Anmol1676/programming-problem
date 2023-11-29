@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import './channels.css';
+import './channels.css';
 import Feed from '../Post/post';
 
 const ChannelPage = ({ loginUsername }) => {
