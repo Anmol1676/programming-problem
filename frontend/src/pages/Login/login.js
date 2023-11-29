@@ -4,7 +4,7 @@ import ChannelLanding from '../ChannelLanding/chanelLanding';
 import { useNavigate } from 'react-router-dom';
 
 function Login({onLogin}){
-  const navigate = useNavigate();
+    const navigate = useNavigate();
     const [loginUsername, SetLoginUsername] = useState("");
     const [loginPassword, SetLoginPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);

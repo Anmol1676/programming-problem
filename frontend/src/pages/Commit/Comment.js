@@ -4,10 +4,10 @@ import axios from 'axios';
 const Comment = ({ postId, loginUsername }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  
+  
 
-  useEffect(() => {
-    fetchComments();
-  }, [postId]);
+
 
   const fetchComments = useCallback(async () => {
     try {
@@ -18,9 +18,11 @@ const Comment = ({ postId, loginUsername }) => {
     }
   },[postId]);
 
+
+
   useEffect(() => {
     fetchComments();
-  }, [fetchComments]);
+  }, [postId, comments]);
 
 
   const addComment = async (e) => {
@@ -28,22 +30,25 @@ const Comment = ({ postId, loginUsername }) => {
     try {
       await axios.post(`http://localhost:4000/posts/${postId}/comments`, { 
         content: newComment, 
-        author: 'YourAuthorName' });
+        author: 'YourAuthorName' 
+      });
       setNewComment('');
-      fetchComments();
+      await fetchComments();
+
+
     } catch (error) {
       console.error('Error adding comment:', error);
     }
   };
 
-  const deleteComment = async (commentId) => {
-    try {
-      await axios.delete(`http://localhost:4000/comments/${commentId}`);
-      fetchComments();
-    } catch (error) {
-      console.error(`Error deleting comment:`, error);
-    }
-  };
+  //const deleteComment = async (commentId) => {
+    //try {
+      //await axios.delete(`http://localhost:4000/comments/${commentId}`);
+      //fetchComments();
+    //} catch (error) {
+      //console.error(`Error deleting comment:`, error);
+    //}
+  //};
 
 
 
@@ -60,10 +65,14 @@ const Comment = ({ postId, loginUsername }) => {
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>
-            {comment.content}
-            {loginUsername === 'admin' && (
+            <p>{comment.content}</p>
+            
+            
+            
+            {/*{loginUsername === 'admin' && (
               <button onClick={() => deleteComment(comment.id)}>Delete</button>
-            )}
+            )} */}
+
           </li>
         ))}
       </ul>

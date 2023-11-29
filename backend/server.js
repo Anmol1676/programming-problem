@@ -9,6 +9,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 const mysql = require('mysql2');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 
 var db = mysql.createConnection({
@@ -88,25 +90,25 @@ function createChannelsTable() {
 
 //create post table 
 function createPostsTable() {
-    db.query(
-    `CREATE TABLE IF NOT EXISTS posts (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-        content TEXT NOT NULL,
-        author VARCHAR(255) NOT NULL,
-      channel_id INT NOT NULL,
-      likes INT DEFAULT 0,
-      dislikes INT DEFAULT 0,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (channel_id) REFERENCES channels(id)
+  db.query(
+      `CREATE TABLE IF NOT EXISTS posts (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          content TEXT NOT NULL,
+          author VARCHAR(255) NOT NULL,
+          channel_id INT NOT NULL,
+          likes INT DEFAULT 0,
+          dislikes INT DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          image_url VARCHAR(255) -- New column for image URL
       )`,
       (err, results) => {
-        if (err) {
-          console.log(err);
-        } else {
-        console.log('Posts table created/checked');
-        }
+          if (err) {
+              console.log(err);
+          } else {
+              console.log('Posts table updated/checked');
+          }
       }
-    );
+  );
 }
 
 //create Comments table 
@@ -202,29 +204,24 @@ app.get('/channels', (req, res) => {
 
 
 //POST post (make new posts in the a given channel )
-app.post('/channels/:channelId/posts', (req, res) => {
+app.post('/channels/:channelId/posts', upload.single('image'), (req, res) => {
   const channelId = req.params.channelId;
-  const content = req.body.content;
-  const author = req.body.author;
+  const { content, author } = req.body;
+  const imagePath = req.file ? req.file.path : null;
+  console.log(req.file);
 
-  console.log("Received channelId on backend:", req.params.channelId);
-
-  if (!channelId) {
-    res.status(400).send('Channel ID is undefined');
-    return;
-  }
-  
-
-  db.query('INSERT INTO posts (content, author, channel_id, likes) VALUES (?, ?, ?, 0)', [content, author, channelId], (err, results) => {
+  db.query('INSERT INTO posts (content, author, channel_id, likes, image_url) VALUES (?, ?, ?, 0, ?)',
+        [content, author, channelId, imagePath], (err, results) => {
       if (err) {
-        console.log(err);
-        res.status(500).send('Error creating post');
+          console.log(err);
+          res.status(500).send('Error creating post');
       } else {
-        res.status(201).send('Post created successfully');
+          res.status(201).send('Post created successfully');
       }
   });
 });
 
+app.use('/uploads', express.static('uploads'));
 
 
 
@@ -276,6 +273,7 @@ app.post('/posts/:postId/comments', (req, res) => {
   const postId = req.params.postId;
   const content = req.body.content;
   const author = req.body.author;
+  
 
   if (!content) {
     return res.status(400).send('Comment content cannot be empty');

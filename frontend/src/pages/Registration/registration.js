@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 //import ChannelLanding from '../ChannelLanding/chanelLanding'
 import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function Registration(){
     const [regUsername, SetRegUsername] = useState(""); 
     const [regPassword, SetRegPassword] = useState("");
     const [RegUsernameTaken, SetRegUsernameTaken] = useState(false); 
+    const navigate = useNavigate();
 
     const register = () => {
         Axios.post('http://localhost:4000/regitration', { // Corrected URL and syntax
@@ -19,6 +21,7 @@ function Registration(){
                 SetRegUsernameTaken(true);
             } else {
                 window.alert("Registration was successful!!! ;) ");
+                navigate('/login');
             }
         }).catch((error) => {
             console.log(error);
