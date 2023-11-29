@@ -4,10 +4,6 @@ import axios from 'axios';
 const Comment = ({ postId, loginUsername }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  
-  
-
-
 
   const fetchComments = useCallback(async () => {
     try {
@@ -22,20 +18,20 @@ const Comment = ({ postId, loginUsername }) => {
 
   useEffect(() => {
     fetchComments();
-  }, [postId, comments]);
+  }, [postId, fetchComments,comments]);
 
 
   const addComment = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:4000/posts/${postId}/comments`, { 
-        content: newComment, 
-        author: 'YourAuthorName' 
+      const response = await axios.post(`http://localhost:4000/posts/${postId}/comments`, {
+        content: newComment,
+        author: 'YourAuthorName'
       });
+      console.log(response.data);
       setNewComment('');
-      await fetchComments();
-
-
+      // Update the comments state with the new comment returned from the server
+      setComments(comments => [...comments, response.data.comment]);
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -66,9 +62,6 @@ const Comment = ({ postId, loginUsername }) => {
         {comments.map((comment) => (
           <li key={comment.id}>
             <p>{comment.content}</p>
-            
-            
-            
             {/*{loginUsername === 'admin' && (
               <button onClick={() => deleteComment(comment.id)}>Delete</button>
             )} */}

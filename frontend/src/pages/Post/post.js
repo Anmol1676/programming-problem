@@ -42,7 +42,7 @@ const Posts = ({ channelId }) => {
   
       const formData = new FormData();
       formData.append('content', newPostContent);
-      formData.append('author', 'YourAuthorName'); // Replace 'YourAuthorName' with the actual author name variable if needed
+      formData.append('author', 'YourAuthorName'); 
       
       // Append image only if it has been selected
       if (image) {

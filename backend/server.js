@@ -273,7 +273,6 @@ app.post('/posts/:postId/comments', (req, res) => {
   const postId = req.params.postId;
   const content = req.body.content;
   const author = req.body.author;
-  
 
   if (!content) {
     return res.status(400).send('Comment content cannot be empty');
@@ -284,22 +283,14 @@ app.post('/posts/:postId/comments', (req, res) => {
       console.log(err);
       res.status(500).send('Error creating comment');
     } else {
-      res.status(201).send('Comment created successfully');
-  
-      // emit new comment event to the post's channel
-      const channelIdQuery = 'SELECT channel_id FROM posts WHERE id = ?';
-      const commentId = insertResults.insertId; // Store the insertId from the previous query
-      db.query(channelIdQuery, [postId], (err, channelIdResults) => {
-        if (err) {
-          console.log(err);
-        } else {
-          const channelId = channelIdResults[0].channel_id;
-          io.to(channelId).emit('new comment', {
-            id: commentId, // Use the stored insertId here
-            content,
-            author,
-            post_id: postId,
-          });
+      // Send back the ID of the new comment, along with any other relevant data
+      res.status(201).json({
+        message: 'Comment created successfully',
+        comment: {
+          id: insertResults.insertId,
+          content,
+          author,
+          post_id: postId
         }
       });
     }
