@@ -8,6 +8,7 @@ import Registration from './pages/Registration/registration';
 import Channel from './pages/ChannelLanding/chanelLanding';
 import Posts from './pages/Post/post';
 import Comment from './pages/Commit/Comment';
+import Search from './pages/Search/search';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,6 +29,7 @@ function App() {
             <Route path="/registration" element={<Registration />} />
             {isLoggedIn && <Route path="/channel" element={<Channel />} />}
             {isLoggedIn && <Route path="/channel/:channelId/posts" element={<Posts />} />}
+            {isLoggedIn && <Route path="/Search" element={<Search />} />}
            
 
           

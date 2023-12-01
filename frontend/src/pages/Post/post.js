@@ -24,14 +24,31 @@ const Posts = ({ channelId }) => {
     }, [channelId, fetchPosts]);
 
     const openImageModal = (imageUrl) => {
-      setSelectedImage(imageUrl);
-      setShowImageModal(true);
-  };
+        setSelectedImage(imageUrl);
+        setShowImageModal(true);
+    };
 
-  const closeImageModal = () => {
-      setShowImageModal(false);
-      setSelectedImage(null);
-  };
+    const closeImageModal = () => {
+        setShowImageModal(false);
+        setSelectedImage(null);
+    };
+    
+    const handleLike = async (postId) => {
+        try {
+            await axios.post(`http://localhost:4000/posts/${postId}/like`);
+            fetchPosts(); // Re-fetch posts to update likes count
+        } catch (error) {
+            console.error('Error liking post:', error);
+        }
+    };
+    const handleDislike = async (postId) => {
+        try {
+            await axios.post(`http://localhost:4000/posts/${postId}/dislike`);
+            fetchPosts(); // Re-fetch posts to update likes count
+        } catch (error) {
+            console.error('Error liking post:', error);
+        }
+    };
 
     const handlePostSubmit = async (e) => {
       e.preventDefault();
@@ -86,21 +103,23 @@ const Posts = ({ channelId }) => {
                 <button type="submit">Post</button>
             </form>
             <ul className="posts-list">
-  {posts.map(post => (
-    <li key={post.id}>
-      <p>{post.content}</p>
-      {post.image_url ? (
-        <img
-          src={`http://localhost:4000/${post.image_url}`}
-          alt="Post"
-          onClick={() => openImageModal(`http://localhost:4000/${post.image_url}`)}
-          style={{ width: '150px', cursor: 'pointer' }} // Inline styles for the thumbnail
-        />
-      ) : null}
-      <Comment postId={post.id} />
-    </li>
-  ))}
-</ul>
+                {posts.map(post => (<li key={post.id}>
+                    <p>{post.content}</p>
+                    <button onClick={() => handleLike(post.id)}>Like</button>
+        <span>{post.likes}</span>
+        <button onClick={() => handleDislike(post.id)}>Dislike</button>
+        <span>{post.dislikes}</span>
+                    {post.image_url ? (
+                    <img
+                        src={`http://localhost:4000/${post.image_url}`}
+                        alt="Post"
+                        onClick={() => openImageModal(`http://localhost:4000/${post.image_url}`)}
+                        style={{ width: '150px', cursor: 'pointer' }} // Inline styles for the thumbnail
+                    />
+                    ) : null} 
+                    <Comment postId={post.id} />
+                    </li>))}
+            </ul>
             <div className={`full-size-image-modal ${showImageModal ? 'show' : ''}`} onClick={closeImageModal}>
                 {showImageModal && <img src={selectedImage} alt="Full Size Post" />}
             </div>

@@ -132,6 +132,7 @@ function createCommentsTable() {
   });
 }
 
+// create admin 
 
 
 
@@ -233,6 +234,31 @@ app.post('/channels/:channelId/posts', upload.single('image'), (req, res) => {
 
 app.use('/uploads', express.static('uploads'));
 
+//like
+app.post('/posts/:postId/like', (req, res) => {
+  const postId = req.params.postId;
+  db.query('UPDATE posts SET likes = likes + 1 WHERE id = ?', [postId], (err, result) => {
+      if (err) {
+          res.status(500).send('Error updating post');
+      } else {
+          res.status(200).send('Post liked successfully');
+      }
+  });
+});
+
+//dislike
+app.post('/posts/:postId/dislike', (req, res) => {
+  const postId = req.params.postId;
+  db.query('UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?', [postId], (err, result) => {
+      if (err) {
+          res.status(500).send('Error updating post');
+      } else {
+          res.status(200).send('Post liked successfully');
+      }
+  });
+});
+
+
 
 
 //GET post (get the post made)
@@ -330,7 +356,18 @@ app.get('/posts/:postId/comments', (req, res) => {
 
 
 //search by string (search the post table)
-    //TODO
+
+app.get('/searchString', (req, res) => {
+  const searchString = req.query.searchString;
+  db.query('SELECT * FROM posts WHERE content LIKE ?', [`%${searchString}%`], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error fetching post');
+    } else {
+      res.status(200).json(result); // Corrected from 'results' to 'result'
+    }
+  });
+});
 
 
 //search by author (search the post by username)
