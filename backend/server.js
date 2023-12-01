@@ -113,14 +113,24 @@ function createPostsTable() {
 
 //create Comments table 
 function createCommentsTable() {
-  db.query('CREATE TABLE IF NOT EXISTS comments (id INT NOT NULL AUTO_INCREMENT,content TEXT NOT NULL, author VARCHAR(255) NOT NULL, post_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (post_id) REFERENCES posts(id)) ENGINE=InnoDB', (err, results) => {
+  db.query(`
+    CREATE TABLE IF NOT EXISTS comments (
+      id INT NOT NULL AUTO_INCREMENT,
+      content TEXT NOT NULL,
+      author VARCHAR(255) NOT NULL,
+      post_id INT NOT NULL,
+      parent_id INT,
+      PRIMARY KEY (id),
+      FOREIGN KEY (post_id) REFERENCES posts(id),
+      FOREIGN KEY (parent_id) REFERENCES comments(id)
+    ) ENGINE=InnoDB`, (err, results) => {
     if (err) {
       console.log(err);
     } else {
       console.log('Comments table created/checked');
     }
   });
-};
+}
 
 
 
@@ -270,15 +280,16 @@ app.get('/channels/:channelId/posts', (req, res) => {
 
 //POST reply (make new reply and make nested reply to post made on the channel)
 app.post('/posts/:postId/comments', (req, res) => {
-  const postId = req.params.postId;
-  const content = req.body.content;
-  const author = req.body.author;
+  const { postId } = req.params;
+  const { content, author, parent_id } = req.body;
 
   if (!content) {
     return res.status(400).send('Comment content cannot be empty');
   }
 
-  db.query('INSERT INTO comments (content, author, post_id) VALUES (?, ?, ?)', [content, author, postId], (err, insertResults) => {
+  db.query('INSERT INTO comments (content, author, post_id, parent_id) VALUES (?, ?, ?, ?)',
+    [content, author, postId, parent_id || null], (err, insertResults) => {
+      
     if (err) {
       console.log(err);
       res.status(500).send('Error creating comment');
@@ -298,12 +309,6 @@ app.post('/posts/:postId/comments', (req, res) => {
 });
 
 
-
-
-//DELETE reply ( the admin can delete replay)
-    //TODO
-
-
 //GET reply (get the replys made)
 app.get('/posts/:postId/comments', (req, res) => {
   const postId = req.params.postId;
@@ -317,6 +322,11 @@ app.get('/posts/:postId/comments', (req, res) => {
     }
   });
 });
+
+
+
+//DELETE reply ( the admin can delete replay)
+    //TODO
 
 
 //search by string (search the post table)
