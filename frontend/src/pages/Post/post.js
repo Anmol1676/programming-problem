@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Comment from '../Commit/Comment';
+import Prism from 'prismjs';
 import './post.css';
+import 'prismjs/themes/prism.css';
 
 const Posts = ({ channelId }) => {
     const [posts, setPosts] = useState([]);
@@ -9,6 +11,8 @@ const Posts = ({ channelId }) => {
     const [image, setImage] = useState(null);
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    
+
 
     const fetchPosts = useCallback(async () => {
         try {
@@ -19,9 +23,16 @@ const Posts = ({ channelId }) => {
         }
     }, [channelId]);
 
+
     useEffect(() => {
         fetchPosts();
-    }, [channelId, fetchPosts]);
+    }, [channelId]);
+    
+    useEffect(() => {
+        if (posts.length > 0) {
+            Prism.highlightAll();
+        }
+    }, [posts]);
 
     const openImageModal = (imageUrl) => {
         setSelectedImage(imageUrl);
@@ -36,7 +47,7 @@ const Posts = ({ channelId }) => {
     const handleLike = async (postId) => {
         try {
             await axios.post(`http://localhost:4000/posts/${postId}/like`);
-            fetchPosts(); // Re-fetch posts to update likes count
+            await fetchPosts(); 
         } catch (error) {
             console.error('Error liking post:', error);
         }
@@ -60,6 +71,7 @@ const Posts = ({ channelId }) => {
       const formData = new FormData();
       formData.append('content', newPostContent);
       formData.append('author', 'YourAuthorName'); 
+
       
       // Append image only if it has been selected
       if (image) {
@@ -67,21 +79,18 @@ const Posts = ({ channelId }) => {
       }
   
       try {
-          const config = {
-              headers: {
-                  'Content-Type': 'multipart/form-data',
-              },
-          };
-          // Post the formData to the server
-          await axios.post(`http://localhost:4000/channels/${channelId}/posts`, formData, config);
-          
-          // Clear the input fields after successful submission
-          setNewPostContent('');
-          setImage(null); // Clear the image from the state
-          fetchPosts(); // Refetch posts to update the list
-      } catch (error) {
-          console.error('Error submitting post:', error);
-      }
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        await axios.post(`http://localhost:4000/channels/${channelId}/posts`, formData, config);
+        setNewPostContent('');
+        setImage(null);
+        fetchPosts();
+    } catch (error) {
+        console.error('Error submitting post:', error);
+    }
   };
   
 
@@ -89,7 +98,8 @@ const Posts = ({ channelId }) => {
     <div className="posts-container">
         <h1 className="posts-header">Posts in Channel</h1>
         <form className="new-post-form" onSubmit={handlePostSubmit}>
-                <input
+                
+                <textarea
                     type="text"
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value)}
@@ -103,12 +113,19 @@ const Posts = ({ channelId }) => {
                 <button type="submit">Post</button>
             </form>
             <ul className="posts-list">
-                {posts.map(post => (<li key={post.id}>
-                    <p>{post.content}</p>
+                {posts.map(post => (
+                <li key={post.id}>
+                    {post.content && (
+                        <p>
+                            <pre><code className="language-javascript">{post.content}</code></pre>
+                        </p>
+                    )}
+
+                    
                     <button onClick={() => handleLike(post.id)}>Like</button>
-        <span>{post.likes}</span>
-        <button onClick={() => handleDislike(post.id)}>Dislike</button>
-        <span>{post.dislikes}</span>
+                    <span>{post.likes}</span>
+                    <button onClick={() => handleDislike(post.id)}>Dislike</button>
+                    <span>{post.dislikes}</span>
                     {post.image_url ? (
                     <img
                         src={`http://localhost:4000/${post.image_url}`}

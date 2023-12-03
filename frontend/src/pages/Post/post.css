@@ -1,97 +1,116 @@
-/* Posts.css */
-
+/* General Styles */
 .posts-container {
-    padding: 20px;
-    background: #f9f9f9;
-    min-height: 100vh;
-  }
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+
+.posts-header {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* New Post Form */
+.new-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
   
-  .posts-header {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .new-post-form {
-    margin-bottom: 30px;
-  }
-  
-  .new-post-form input[type="text"],
-  .new-post-form input[type="file"] {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .new-post-form button {
-    padding: 10px 20px;
-    background-color: #008cba;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .new-post-form button:hover {
-    background-color: #007ba7;
-  }
-  
-  .posts-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .posts-list li {
-    background: white;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .posts-list p {
-    margin: 0;
-    margin-bottom: 10px;
-  }
-  
-  .posts-list img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .comment-section {
-    margin-top: 10px;
-  }
-  .posts-list img {
-    width: 150px; /* Set a fixed width for thumbnails */
-    height: auto;
-    border-radius: 4px;
-    cursor: pointer; /* Indicates the image is clickable */
-  }
-  
-  .full-size-image-modal {
-    display: none; /* Hide the modal by default */
-    position: fixed;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  
-  .full-size-image-modal img {
-    margin: auto;
-    display: block;
-    max-width: 80%;
-    max-height: 80%;
-    margin-top: 10%;
-  }  
-  .full-size-image-modal.show {
-    display: block; /* Show the modal when this class is applied */
-  }
+}
+
+/* Input fields with consistent spacing and subtle borders */
+.new-post-form input[type="text"],
+.new-post-form input[type="file"] {
+  width: calc(100% - 140px); /* Adjust width to avoid overflow, considering button width */
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ddd; /* Lighter border */
+  border-radius: 4px;
+  margin-bottom: 0; /* Align with button */
+  transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+/* Hover effect on inputs */
+.new-post-form input[type="text"]:hover,
+.new-post-form input[type="file"]:hover {
+  border-color: #bbb; /* Darker border on hover for feedback */
+}
+
+.new-post-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.new-post-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-post-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Post List */
+.posts-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.posts-list li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+/* Code Block */
+pre {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  margin-right: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+}
+
+button:hover {
+  background-color: #e2e6ea;
+}
+
+/* Image Modal */
+.full-size-image-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.full-size-image-modal.show {
+  display: flex;
+}
+
+.full-size-image-modal img {
+  max-width: 90%;
+  max-height: 90%;
+}

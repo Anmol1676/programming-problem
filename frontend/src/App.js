@@ -30,6 +30,7 @@ function App() {
             {isLoggedIn && <Route path="/channel" element={<Channel />} />}
             {isLoggedIn && <Route path="/channel/:channelId/posts" element={<Posts />} />}
             {isLoggedIn && <Route path="/Search" element={<Search />} />}
+
            
 
           

@@ -68,6 +68,14 @@ function createUserTable() {
         } else {
           
           console.log("Users table created/checked");
+          db.query("INSERT INTO users (username, password, is_admin) VALUES ('admin', 'admin123', 1)", (error, results) => {
+            if(error){
+                console.log("Admin not added" + error );
+            }else{
+                console.log("admin was added!!");
+            }
+
+          });
         }
       }
     );
@@ -118,21 +126,20 @@ function createCommentsTable() {
       id INT NOT NULL AUTO_INCREMENT,
       content TEXT NOT NULL,
       author VARCHAR(255) NOT NULL,
+      image_url VARCHAR(255),
       post_id INT NOT NULL,
       parent_id INT,
       PRIMARY KEY (id),
-      FOREIGN KEY (post_id) REFERENCES posts(id),
-      FOREIGN KEY (parent_id) REFERENCES comments(id)
-    ) ENGINE=InnoDB`, (err, results) => {
+      FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+      FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB;`, (err, results) => {
     if (err) {
-      console.log(err);
+      console.log('Error creating comments table:', err);
     } else {
       console.log('Comments table created/checked');
     }
   });
 }
-
-// create admin 
 
 
 
@@ -162,6 +169,11 @@ app.post('/regitration', (req,res)=>{
         }
     });
 });
+
+//profile 
+
+
+// delete user 
 
 
 //login backend
@@ -260,10 +272,10 @@ app.post('/posts/:postId/dislike', (req, res) => {
 
 
 
-
 //GET post (get the post made)
-app.get('/channels/:channelId/posts', (req, res) => {
+app.get('/channels/:channelId/posts', upload.single('image'), (req, res) => {
     const channelId = req.params.channelId;
+
     console.log(req.params);
     db.query('SELECT * FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
       if (err) {
@@ -305,32 +317,35 @@ app.get('/channels/:channelId/posts', (req, res) => {
   
 
 //POST reply (make new reply and make nested reply to post made on the channel)
-app.post('/posts/:postId/comments', (req, res) => {
+app.post('/posts/:postId/comments', upload.single('image'), (req, res) => {
   const { postId } = req.params;
   const { content, author, parent_id } = req.body;
-
+  const imagePath = req.file ? req.file.path : null;
+  
   if (!content) {
     return res.status(400).send('Comment content cannot be empty');
   }
 
-  db.query('INSERT INTO comments (content, author, post_id, parent_id) VALUES (?, ?, ?, ?)',
-    [content, author, postId, parent_id || null], (err, insertResults) => {
-      
-    if (err) {
-      console.log(err);
-      res.status(500).send('Error creating comment');
-    } else {
-      // Send back the ID of the new comment, along with any other relevant data
-      res.status(201).json({
-        message: 'Comment created successfully',
-        comment: {
-          id: insertResults.insertId,
-          content,
-          author,
-          post_id: postId
-        }
-      });
-    }
+  // Convert 'null' string to actual NULL value for SQL
+  const parentId = parent_id === 'null' ? null : parent_id;
+
+  db.query('INSERT INTO comments (content, author, image_url, post_id, parent_id) VALUES (?, ?, ?, ?, ?)',
+    [content, author, imagePath, postId, parentId], (err, insertResults) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error creating comment');
+      } else {
+        // Send back the ID of the new comment, along with any other relevant data
+        res.status(201).json({
+          message: 'Comment created successfully',
+          comment: {
+            id: insertResults.insertId,
+            content,
+            author,
+            post_id: postId
+          }
+        });
+      }
   });
 });
 
@@ -371,11 +386,31 @@ app.get('/searchString', (req, res) => {
 
 
 //search by author (search the post by username)
-    //TODO
+app.get('/searchauthor', (req, res) => {
+  const searchString = req.query.searchString;
+  db.query('SELECT * FROM posts WHERE author LIKE ?', [`%${searchString}%`], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error fetching post');
+    } else {
+      res.status(200).json(result); // Corrected from 'results' to 'result'
+    }
+  });
+});
 
 
 //search by likes ( search by most like in the user table)
-    //TODO
+app.get('/searchlike', (req, res) => {
+  db.query('SELECT * FROM posts ORDER BY likes DESC', (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error fetching posts');
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 
 
 //search by ranks(search the post by rank )

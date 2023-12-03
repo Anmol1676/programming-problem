@@ -30,3 +30,7 @@
     font-weight: bold;
     color: rgb(157, 157, 157);
 }
+.buttons{
+    bottom: unset;
+    color: black;
+}
