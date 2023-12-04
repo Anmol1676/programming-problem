@@ -19,12 +19,16 @@ function App() {
     setUsername(user); 
     console.log("Logged in user:", user); 
 };
+const onLogout = () => {
+  setIsLoggedIn(false);
+  setUsername('');
+};
 
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          {isLoggedIn ? <NavBar /> : <Nav />} 
+          {isLoggedIn ? <NavBar onLogout={onLogout} /> : <Nav />} 
           {/* Conditional rendering of navigation based on login status */}
           <Routes>
             <Route path="/" element={<Home />} />

@@ -65,9 +65,12 @@ const ChannelPage = ({ loginUsername }) => {
               <li key={channel.id}>
                 {channel.name}
                 <button onClick={() => joinChannel(channel.id, channel.name)}>Join</button>
+                
                 {loginUsername === 'admin' && (
                   <button onClick={() => deleteChannel(channel.name)}>Delete</button>
                 )}
+
+                
               </li>
             ))}
           </ul>
