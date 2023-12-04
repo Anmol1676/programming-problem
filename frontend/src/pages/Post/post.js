@@ -5,12 +5,16 @@ import Prism from 'prismjs';
 import './post.css';
 import 'prismjs/themes/prism.css';
 
-const Posts = ({ channelId }) => {
+
+
+const Posts = ({ channelId, username, channelName }) => {
     const [posts, setPosts] = useState([]);
     const [newPostContent, setNewPostContent] = useState('');
     const [image, setImage] = useState(null);
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    console.log("Username in Posts:", username); 
+    
     
 
 
@@ -70,7 +74,8 @@ const Posts = ({ channelId }) => {
   
       const formData = new FormData();
       formData.append('content', newPostContent);
-      formData.append('author', 'YourAuthorName'); 
+      formData.append('author', username); 
+      console.log("FormData before sending:", Array.from(formData));
 
       
       // Append image only if it has been selected
@@ -96,7 +101,7 @@ const Posts = ({ channelId }) => {
 
   return (
     <div className="posts-container">
-        <h1 className="posts-header">Posts in Channel</h1>
+        <h1 className="posts-header">Posts in {channelName}</h1>
         <form className="new-post-form" onSubmit={handlePostSubmit}>
                 
                 <textarea
@@ -115,6 +120,11 @@ const Posts = ({ channelId }) => {
             <ul className="posts-list">
                 {posts.map(post => (
                 <li key={post.id}>
+                    <div>
+                        Posted by: {post.author}
+
+
+                    </div>
                     {post.content && (
                         <p>
                             <pre><code className="language-javascript">{post.content}</code></pre>
@@ -134,7 +144,7 @@ const Posts = ({ channelId }) => {
                         style={{ width: '150px', cursor: 'pointer' }} // Inline styles for the thumbnail
                     />
                     ) : null} 
-                    <Comment postId={post.id} />
+                    <Comment postId={post.id }  username={username}/>
                     </li>))}
             </ul>
             <div className={`full-size-image-modal ${showImageModal ? 'show' : ''}`} onClick={closeImageModal}>

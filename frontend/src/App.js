@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Nav from './pages/Nav/nav';
 import NavBar from './NavBar/navBar';
 import Home from './pages/Home/home';
@@ -7,33 +7,37 @@ import Login from './pages/Login/login';
 import Registration from './pages/Registration/registration';
 import Channel from './pages/ChannelLanding/chanelLanding';
 import Posts from './pages/Post/post';
-import Comment from './pages/Commit/Comment';
 import Search from './pages/Search/search';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
 
-  const handleLogin = (status) => {
+  // This function is triggered when the user logs in
+  const handleLogin = (status, user) => {
     setIsLoggedIn(status);
-  };
-
+    setUsername(user); 
+    console.log("Logged in user:", user); 
+};
 
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          {isLoggedIn ? <NavBar /> : <Nav />} {/* Conditional rendering */}
+          {isLoggedIn ? <NavBar /> : <Nav />} 
+          {/* Conditional rendering of navigation based on login status */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/registration" element={<Registration />} />
-            {isLoggedIn && <Route path="/channel" element={<Channel />} />}
-            {isLoggedIn && <Route path="/channel/:channelId/posts" element={<Posts />} />}
-            {isLoggedIn && <Route path="/Search" element={<Search />} />}
 
-           
+            {isLoggedIn && <Route path="/channel" element={<Channel loginUsername={username} />} />}
 
-          
+            {/* Passing username as a prop to Posts */}
+            <Route path="/channel/:channelId/posts" element={<Posts />} />
+
+
+            {isLoggedIn && <Route path="/search" element={<Search />} />}
 
             {/* Add other routes as needed */}
           </Routes>

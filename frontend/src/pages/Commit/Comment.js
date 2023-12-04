@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 
-const Comment = ({ postId, loginUsername }) => {
+const Comment = ({ postId, username }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [parentCommentId, setParentCommentId] = useState(null);
@@ -41,7 +41,7 @@ const Comment = ({ postId, loginUsername }) => {
     try {
       const formData = new FormData();
       formData.append('content', newComment);
-      formData.append('author', loginUsername);  // Using the provided loginUsername
+      formData.append('author', username);  // Using the provided loginUsername
       formData.append('parent_id', parentCommentId);  // Include the parent comment ID
 
       if (image) {
@@ -67,7 +67,7 @@ const Comment = ({ postId, loginUsername }) => {
     try {
       const formData = new FormData();
       formData.append('content', replyComment);
-      formData.append('author', loginUsername);
+      formData.append('author', username);
       formData.append('parent_id', commentId);
 
       if (replyImage) {
@@ -110,6 +110,11 @@ const Comment = ({ postId, loginUsername }) => {
                   <button onClick={() => addReply(comment.id)}>Submit Reply</button>
                 </div>
               )}
+              <div>
+                        Posted by: {username}
+
+
+                    </div>
               {renderComments(comments, comment.id)} {/* Recursively render child comments */}
             </li>
         ))}

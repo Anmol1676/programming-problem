@@ -232,6 +232,7 @@ app.post('/channels/:channelId/posts', upload.single('image'), (req, res) => {
   const { content, author } = req.body;
   const imagePath = req.file ? req.file.path : null;
   console.log(req.file);
+  console.log("Request body:", req.body);
 
   db.query('INSERT INTO posts (content, author, channel_id, likes, image_url) VALUES (?, ?, ?, 0, ?)',
         [content, author, channelId, imagePath], (err, results) => {
@@ -240,6 +241,7 @@ app.post('/channels/:channelId/posts', upload.single('image'), (req, res) => {
           res.status(500).send('Error creating post');
       } else {
           res.status(201).send('Post created successfully');
+          console.log("content:"+ content + "author: " +author);
       }
   });
 });

@@ -42,9 +42,10 @@ const ChannelPage = ({ loginUsername }) => {
     }
   };
 
-  const joinChannel = (channelId) => {
+  const joinChannel = (channelId, name) => {
     setShowFeed(true);
     setSelectedChannelId(channelId);
+    setChannelName(name);
   };
 
 
@@ -52,13 +53,18 @@ const ChannelPage = ({ loginUsername }) => {
     <div className="channel-page">
       {!showFeed && !showSearch ? (
         <div className="channels-container">
+          <h1 className='top'> 
+            Welcome {loginUsername}
+          </h1>
+
+
           <h1>Channels</h1>
           
           <ul>
             {channels.map((channel) => (
               <li key={channel.id}>
                 {channel.name}
-                <button onClick={() => joinChannel(channel.id)}>Join</button>
+                <button onClick={() => joinChannel(channel.id, channel.name)}>Join</button>
                 {loginUsername === 'admin' && (
                   <button onClick={() => deleteChannel(channel.name)}>Delete</button>
                 )}
@@ -78,7 +84,8 @@ const ChannelPage = ({ loginUsername }) => {
       ) : (
         showFeed && (
           <>
-            <Feed channelId={selectedChannelId} loginUsername={loginUsername} />
+            <Feed channelId={selectedChannelId} username= {loginUsername} channelName={channelName} />
+
           </>
         )
       )}
