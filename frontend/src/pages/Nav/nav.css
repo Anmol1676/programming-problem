@@ -1,18 +1,16 @@
+/* Navbar container */
 .navbar {
-    position: fixed; /* Fix the navbar to the top of the screen */
-    top: 0; /* Align the navbar to the top */
-    left: 0; /* Align the navbar to the left */
-    width: 100%; /* Ensure the navbar spans the full width of the screen */
-    background-color: #ffffff; /* Dark blue background */
-    z-index: 1030; /* Higher z-index to ensure it stays on top of other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333; /* Dark background color */
+    z-index: 1030;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-
-    flex-direction: column;
 }
 
 /* Top row styling */
@@ -21,12 +19,45 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 0.5rem; /* Space between top row and navigation buttons */
 }
 
 /* Style for the company name */
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: rgb(157, 157, 157);
+    color: #fff; /* White text color */
+}
+
+/* Navigation buttons */
+.navbar-buttons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-buttons li {
+    margin-right: 1rem;
+}
+
+.navbar-buttons a {
+    text-decoration: none;
+    color: #fff; /* White text color */
+    font-weight: 500;
+}
+
+/* Style for the buttons */
+.button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #007bff; /* Blue button background color */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }

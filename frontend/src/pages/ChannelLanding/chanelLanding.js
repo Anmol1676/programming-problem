@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './channels.css';
 import Feed from '../Post/post';
-
+ 
 const ChannelPage = ({ loginUsername }) => {
   const [channels, setChannels] = useState([]);
   const [channelName, setChannelName] = useState('');

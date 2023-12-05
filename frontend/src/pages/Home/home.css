@@ -1,0 +1,37 @@
+.landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: start; 
+    min-height: 100vh; 
+    background-color: #eef5ff;
+    padding-top: 70px; 
+    overflow-y: auto; 
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 1em; 
+}
+
+.title {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    align-self: center;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.5em;
+    text-align: center;
+    
+}
+
+.hero-image img {
+    border: #000000;
+    box-shadow: #000000;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}

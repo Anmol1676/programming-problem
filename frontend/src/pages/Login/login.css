@@ -1,0 +1,33 @@
+.login-App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #eef5ff;
+  }
+  
+
+  .login h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .login label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+    text-align: left;
+  }
+  
+  .login input[type="text"],
+.login input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+ 
+  

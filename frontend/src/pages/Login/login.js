@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Axios from 'axios';
 import ChannelLanding from '../ChannelLanding/chanelLanding';
 import { useNavigate } from 'react-router-dom';
+import './login.css';
 
 function Login({ onLogin }) {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function Login({ onLogin }) {
 
   if (!isLoggedIn) {
     return (
-      <div className="App">
+      <div className="login-App">
         {/* Login */}
         <div className="login">
           <h1>Login</h1>

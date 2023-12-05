@@ -1,73 +1,90 @@
-/* ChannelPage.css */
-
 .channel-page {
-    padding: 20px;
-    background: #f5f5f5;
-    min-height: 100vh;
-  }
-  
-  .channels-container {
-    margin: 0 auto;
-    max-width: 600px;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .channels-container h1 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .channels-container ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .channels-container li {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .create-channel {
-    margin-top: 20px;
-  }
-  
-  .create-channel input {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .create-channel button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .create-channel button:hover {
-    background-color: #0056b3;
-  }
-  
-  button {
-    padding: 5px 10px;
-    margin-left: 5px;
-    background-color: #28a745;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #218838;
-  }
-  
+  padding-top: 70px;
+  background-color: #eef5ff;
+}
+
+element.style {
+  background-color: #eef5ff;
+}
+.top {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.channels-container {
+  background-color: #fff; /* White background for the channels list */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  padding: 20px;
+  margin-bottom: 20px; /* Space between the channels list and the create channel section */
+}
+
+.channels-container h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.channels-container ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+.channels-container li {
+  background-color: #f9f9f9; /* Light background for each list item */
+  border: 1px solid #ddd; /* Border to separate items */
+  padding: 10px;
+  margin-bottom: 10px; /* Space between list items */
+  border-radius: 4px; /* Rounded corners for each list item */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.channels-container button {
+  padding: 5px 10px;
+  background-color: #0056b3; /* Blue background for buttons */
+  color: #fff; /* White text on buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.channels-container button:hover {
+  background-color: #004494; /* Darker blue on hover */
+}
+
+.create-channel {
+  position: fixed; 
+  bottom: 0; 
+  left: 0; 
+  width: 100%; 
+  background-color: #fff; 
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); 
+  z-index: 10; 
+}
+
+.create-channel input {
+  padding: 10px;
+  margin-right: 10px; /* Space between input field and button */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1; /* Allows input to expand to fill space */
+}
+
+.create-channel button {
+  padding: 10px 20px;
+  background-color: #28a745; /* Green background for create button */
+  color: #fff; /* White text for create button */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-channel button:hover {
+  background-color: #218838; /* Darker green on hover */
+}

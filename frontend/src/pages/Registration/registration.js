@@ -2,6 +2,7 @@ import React, { useState } from "react";
 //import ChannelLanding from '../ChannelLanding/chanelLanding'
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './reg.css';
 
 
 function Registration(){
@@ -31,7 +32,7 @@ function Registration(){
 
 
     return (
-        <div className="App">
+        <div className="registration-App">
             <div className="registration">
                 <h1>Registration</h1>
                 <label>Username</label>

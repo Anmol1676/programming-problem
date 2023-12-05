@@ -19,8 +19,8 @@ function NavBar({ onLogout }) {
 
             {/* Bottom row for navigation buttons */}
             <div className="navbar-nav">
-                <Link to='/Channel' className="Channel">Channel</Link>
-                <Link to='/Search' className="home">Search</Link>
+                <Link to='/Channel' className="Channel"><button>Channel</button></Link>
+                <Link to='/Search' className="home"><button>Search</button></Link>
             </div>
         </nav>
     );

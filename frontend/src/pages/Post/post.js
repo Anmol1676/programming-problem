@@ -4,7 +4,7 @@ import Comment from '../Commit/Comment';
 import Prism from 'prismjs';
 import './post.css';
 import 'prismjs/themes/prism.css';
-
+ 
 
 
 const Posts = ({ channelId, username, channelName }) => {
