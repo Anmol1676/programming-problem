@@ -43,7 +43,7 @@ function Users() {
             {users.map(user => (
                 <li key={user.id}>
                     {user.username} - {user.classification}
-                    <button className="button-delete" onClick={() => deleteUser(user.id)}>Delete</button>
+                    {user.id !== "admin " && <button className="button-delete" onClick={() => deleteUser(user.id)}>Delete</button>}
                 </li>
             ))}
         </ul>

@@ -1,10 +1,10 @@
 .channel-page {
   padding-top: 70px;
-  background-color: #eef5ff;
+  background-color: #ffffff;
 }
 
 element.style {
-  background-color: #eef5ff;
+  background-color: #ffffff;
 }
 .top {
   text-align: center;
@@ -70,15 +70,6 @@ element.style {
   z-index: 10; 
 }
 
-/* New container for the input field and button */
-.create-channel-form {
-  display: flex; 
-  justify-content: space-between; /* This will separate the input and the button */
-  align-items: center;
-  width: 100%; /* Ensure the container spans the full width */
-  max-width: 500px; /* Set a max-width for larger screens */
-}
-
 .create-channel input {
   padding: 10px;
   margin-right: 10px; /* Space between input field and button */
@@ -95,4 +86,8 @@ element.style {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+.create-channel button:hover {
+  background-color: #218838; /* Darker green on hover */
 }

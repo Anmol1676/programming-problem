@@ -10,7 +10,7 @@ const ChannelPage = ({ loginUsername }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
 
-  
+
   useEffect(() => {
     fetchChannels();
   }, []);
@@ -51,7 +51,7 @@ const ChannelPage = ({ loginUsername }) => {
 
 
   return (
-    <div className="channel-page">
+    <div className="channel-page" >
       {!showFeed && !showSearch ? (
         <div className="channels-container">
           <h1 className='top'> 
