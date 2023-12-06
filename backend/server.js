@@ -61,14 +61,14 @@ db.connect((err) => {
 // need a ranking system
 function createUserTable() {
     db.query(
-      "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;",
+      "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL, classification VARCHAR(255) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;",
       (err, results) => {
         if (err) {
           console.log(err);
         } else {
           
           console.log("Users table created/checked");
-          db.query("INSERT INTO users (username, password, is_admin) VALUES ('admin', 'admin123', 1)", (error, results) => {
+          db.query("INSERT INTO users (username, password, is_admin, classification) VALUES ('admin', 'admin123', 1, 'Expert')", (error, results) => {
             if(error){
                 console.log("Admin not added" + error );
             }else{
@@ -144,36 +144,63 @@ function createCommentsTable() {
 
 
 //regitration 
-app.post('/regitration', (req,res)=>{
-    const {username, password} = req.body;
-    if (!username || !password ) {
-        res.status(400).send('Missing required fields');
-        return;
-    }
+app.post('/registration', (req, res) => {
+  const { username, password, classification } = req.body;
+  if (!username || !password) {
+      res.status(400).send('Missing required fields');
+      return;
+  }
 
-    db.query('SELECT * FROM users WHERE username = ?', username, (error,result)=>{
-        if(error){
-            console.log(error);
-            res.status(500).send('Error registering user');
-        }else if(result.length > 0) {
-            res.status(409).send('Username already taken');
-        }else{
-            db.query('INSERT INTO users(username, password,is_admin) VALUES (?, ?, 0)', [username,password], (error,result)=>{
-                if(error){
-                    console.log(error);
-                    res.status(500).send('Error registering user');
-                }else{
-                    res.status(201).send('User registered successfully ');
-                }
-            });
-        }
-    });
+  db.query('SELECT * FROM users WHERE username = ?', [username], (error, result) => {
+      if (error) {
+          console.log(error);
+          res.status(500).send('Error registering user');
+      } else if (result.length > 0) {
+          res.status(409).send('Username already taken');
+      } else {
+          db.query('INSERT INTO users (username, password, is_admin, classification) VALUES (?, ?, 0, ?)', 
+          [username, password, classification], (error, result) => {
+              if (error) {
+                  console.log(error);
+                  res.status(500).send('Error registering user');
+              } else {
+                  res.status(201).send('User registered successfully');
+              }
+          });
+      }
+  });
+});
+app.get('/users', (req, res) => {
+  db.query('SELECT * FROM users', (err, results) => { // Corrected SQL query
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error fetching users');
+    } else {
+      res.status(200).json(results);
+    }
+  });
 });
 
-//profile 
+app.delete('/users/:userId', (req, res) => {
+  const userId = req.params.userId;
 
+  if (!userId) {
+      return res.status(400).send('User ID is required');
+  }
 
-// delete user 
+  db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send('Error deleting user');
+      }
+
+      if (result.affectedRows === 0) {
+          return res.status(404).send('User not found');
+      }
+
+      res.status(200).send(`User with ID ${userId} deleted successfully`);
+  });
+});
 
 
 //login backend
@@ -482,12 +509,6 @@ app.get('/searchlike', (req, res) => {
     }
   });
 });
-
-
-
-//search by ranks(search the post by rank )
-    //TODO
-
 
 
 app.listen(PORT, () => {

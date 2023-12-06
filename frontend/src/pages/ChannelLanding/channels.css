@@ -57,6 +57,9 @@ element.style {
 }
 
 .create-channel {
+  display: flex; /* Use flexbox to align children */
+  justify-content: center; /* Center children horizontally */
+  align-items: center; /* Center children vertically */
   position: fixed; 
   bottom: 0; 
   left: 0; 
@@ -65,6 +68,15 @@ element.style {
   padding: 10px 20px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); 
   z-index: 10; 
+}
+
+/* New container for the input field and button */
+.create-channel-form {
+  display: flex; 
+  justify-content: space-between; /* This will separate the input and the button */
+  align-items: center;
+  width: 100%; /* Ensure the container spans the full width */
+  max-width: 500px; /* Set a max-width for larger screens */
 }
 
 .create-channel input {
@@ -83,8 +95,4 @@ element.style {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.create-channel button:hover {
-  background-color: #218838; /* Darker green on hover */
 }

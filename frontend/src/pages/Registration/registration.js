@@ -9,12 +9,15 @@ function Registration(){
     const [regUsername, SetRegUsername] = useState(""); 
     const [regPassword, SetRegPassword] = useState("");
     const [RegUsernameTaken, SetRegUsernameTaken] = useState(false); 
+    const [classification, setClassification] = useState('beginner');
+
     const navigate = useNavigate();
 
     const register = () => {
-        Axios.post('http://localhost:4000/regitration', { // Corrected URL and syntax
+        Axios.post('http://localhost:4000/registration', {
             username: regUsername,
-            password: regPassword
+            password: regPassword,
+            classification: classification
         }).then((response) => {
             console.log(response);
             if (response.data === "Username already taken") {
@@ -52,6 +55,15 @@ function Registration(){
                     value={regPassword}
                     onChange={(e) => SetRegPassword(e.target.value)}
                 />
+                <label>Classification</label>
+                    <select 
+                        value={classification} 
+                         onChange={(e) => setClassification(e.target.value)}
+                    >
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="expert">Expert</option>
+                    </select>
                 <button onClick={register}>Register</button>
             </div> 
         </div>

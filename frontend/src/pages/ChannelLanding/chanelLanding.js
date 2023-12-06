@@ -10,6 +10,7 @@ const ChannelPage = ({ loginUsername }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
 
+  
   useEffect(() => {
     fetchChannels();
   }, []);
@@ -59,6 +60,7 @@ const ChannelPage = ({ loginUsername }) => {
 
 
           <h1>Channels</h1>
+        
           
           <ul>
             {channels.map((channel) => (
@@ -75,14 +77,16 @@ const ChannelPage = ({ loginUsername }) => {
             ))}
           </ul>
           <div className="create-channel">
-            <input
-              type="text"
-              value={channelName}
-              onChange={(e) => setChannelName(e.target.value)}
-              placeholder="Channel name"
-            />
-            <button onClick={createChannel}>Create Channel</button>
-          </div>
+  <div className="create-channel-form">
+    <input
+      type="text"
+      value={channelName}
+      onChange={(e) => setChannelName(e.target.value)}
+      placeholder="Channel name"
+    />
+    <button onClick={createChannel}>Create Channel</button>
+  </div>
+</div>
         </div>
       ) : (
         showFeed && (

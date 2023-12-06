@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Axios from 'axios';
 import ChannelLanding from '../ChannelLanding/chanelLanding';
-import NavBar from "../../NavBar/navBar";
+import NavBar from "../NavBar/navBar";
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 
