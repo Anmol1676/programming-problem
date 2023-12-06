@@ -222,7 +222,33 @@ app.get('/channels', (req, res) => {
 
 //DELETE Channels 
 
-
+// Delete a channel by ID
+app.delete('/channels', (req, res) => {
+  const name = req.body.name;
+  db.query('SELECT id FROM channels WHERE name = ?', [name], (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error deleting channel');
+    } else {
+      const channelId = results[0].id;
+      db.query('DELETE FROM posts WHERE channel_id = ?', [channelId], (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send('Error deleting posts');
+        } else {
+          db.query('DELETE FROM channels WHERE name = ?', [name], (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error deleting channel');
+    } else {
+      res.status(200).send('Channel deleted successfully');
+    }
+  });
+        }
+      });
+    }
+  });
+});
 
 
 
@@ -313,8 +339,36 @@ app.get('/channels/:channelId/posts', upload.single('image'), (req, res) => {
   });
 
   //DELETE Post 
+  app.delete('/channels/:channelId/posts/:postId', (req, res) => {
+    const channelId = req.params.channelId;
+    const postId = req.params.postId;
+    const author = req.body.author;
+  
+    // Add a condition to check if the author is 'admin'
+    if (author === 'admin') {
+      // First, delete comments associated with the post
+      db.query('DELETE FROM comments WHERE post_id = ?', [postId], (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send('Error deleting comments');
+        } else {
+          // Then, delete the post itself
+          db.query('DELETE FROM posts WHERE id = ? AND channel_id = ?', [postId, channelId], (err, results) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send('Error deleting post');
+            } else {
+              res.status(200).send('Post deleted successfully');
+            }
+          });
+        }
+      });
+    } else {
+      res.status(403).send('Unauthorized action');
+    }
+  });
 
-  // add like and dislike to the post 
+
 
   
 
@@ -369,7 +423,23 @@ app.get('/posts/:postId/comments', (req, res) => {
 
 
 //DELETE reply ( the admin can delete replay)
-    //TODO
+app.delete('/comments/:commentId', (req, res) => {
+  const { commentId } = req.params;
+
+  db.query('DELETE FROM comments WHERE id = ?', [commentId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Error deleting comment');
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send('Comment not found');
+    }
+
+    res.status(200).send('Comment deleted successfully');
+  });
+});
+
 
 
 //search by string (search the post table)

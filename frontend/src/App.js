@@ -28,7 +28,7 @@ const onLogout = () => {
     <Router>
       <div className="App">
         <header className="App-header">
-          {isLoggedIn ? <NavBar onLogout={onLogout} /> : <Nav />} 
+          {isLoggedIn ? <NavBar onLogout={onLogout} username= {username}/> : <Nav />} 
           {/* Conditional rendering of navigation based on login status */}
           <Routes>
             <Route path="/" element={<Home />} />

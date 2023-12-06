@@ -9,7 +9,7 @@ function nav() {
             <div className="top-row">
                 <div className="auth-links">
                    <Link to='/login' className="login"> <button className="loginButton">Login</button></Link>
-                    <Link to='/registration' className="registration"><button>Join us</button></Link>
+                    <Link to='/registration' className="registration"><button className="join-us">Join us</button></Link>
                 </div>
             </div>
 

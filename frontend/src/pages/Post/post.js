@@ -64,6 +64,16 @@ const Posts = ({ channelId, username, channelName }) => {
             console.error('Error liking post:', error);
         }
     };
+    const deletePost = async (postId) => {
+        try {
+            await axios.delete(`http://localhost:4000/channels/${channelId}/posts/${postId}`, {
+                data: { author: username } // Change this to the current logged-in user
+            });
+            setPosts(posts.filter((post) => post.id !== postId));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
 
     const handlePostSubmit = async (e) => {
       e.preventDefault();
@@ -96,6 +106,8 @@ const Posts = ({ channelId, username, channelName }) => {
     } catch (error) {
         console.error('Error submitting post:', error);
     }
+
+    
   };
   
 
@@ -118,34 +130,48 @@ const Posts = ({ channelId, username, channelName }) => {
                 <button type="submit">Post</button>
             </form>
             <ul className="posts-list">
-                {posts.map(post => (
-                <li key={post.id}>
-                    <div>
-                        Posted by: {post.author}
+            {posts.map(post => (
+    <li key={post.id}>
+        <div>Posted by: {post.author}</div>
+        
+        {post.image_url && (
+            <img
+                className='pic'
+                src={`http://localhost:4000/${post.image_url}`}
+                alt="Post"
+                onClick={() => openImageModal(`http://localhost:4000/${post.image_url}`)}
+                style={{ width: '150px', cursor: 'pointer' }}
+            />
+        )}
 
+        <div className="post-content">
+            {post.content && (
+                <p>
+                    <pre><code className="language-javascript">{post.content}</code></pre>
+                </p>
+                
+            )}
+            {username === 'admin' && (
+                <button onClick={() => deletePost(post.id)}
+                >Delete</button>
+              )}
+        </div>
 
-                    </div>
-                    {post.content && (
-                        <p>
-                            <pre><code className="language-javascript">{post.content}</code></pre>
-                        </p>
-                    )}
+        <div className="post-interactions">
+            <div className='like'>
+                <button onClick={() => handleLike(post.id)}>Like</button>
+                <span>{post.likes}</span>
+            </div>
+            
+            <div className='dislike'>
+                <button onClick={() => handleDislike(post.id)}>Dislike</button>
+                <span>{post.dislikes}</span>
+            </div>
+        </div>
 
-                    
-                    <button onClick={() => handleLike(post.id)}>Like</button>
-                    <span>{post.likes}</span>
-                    <button onClick={() => handleDislike(post.id)}>Dislike</button>
-                    <span>{post.dislikes}</span>
-                    {post.image_url ? (
-                    <img
-                        src={`http://localhost:4000/${post.image_url}`}
-                        alt="Post"
-                        onClick={() => openImageModal(`http://localhost:4000/${post.image_url}`)}
-                        style={{ width: '150px', cursor: 'pointer' }} // Inline styles for the thumbnail
-                    />
-                    ) : null} 
-                    <Comment postId={post.id }  username={username}/>
-                    </li>))}
+        <Comment postId={post.id} username={username}/>
+    </li>
+))}
             </ul>
             <div className={`full-size-image-modal ${showImageModal ? 'show' : ''}`} onClick={closeImageModal}>
                 {showImageModal && <img src={selectedImage} alt="Full Size Post" />}

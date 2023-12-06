@@ -1,36 +1,78 @@
+/* General Styles for Navbar */
 .navbar {
-    position: fixed; /* Fix the navbar to the top of the screen */
-    top: 0; /* Align the navbar to the top */
-    left: 0; /* Align the navbar to the left */
-    width: 100%; /* Ensure the navbar spans the full width of the screen */
-    background-color: #ffffff; /* Dark blue background */
-    z-index: 1030; /* Higher z-index to ensure it stays on top of other content */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
+    width: 100%;
+    background-color: #333; /* Dark background for navbar */
     color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-
-    flex-direction: column;
+    display: flex;
+        flex-direction: column;
+padding: 10px;
+    box-sizing: border-box;
 }
 
-/* Top row styling */
+/* Top Row Styles */
 .top-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 0.5rem; /* Space between top row and navigation buttons */
+    justify-content: flex-end; /* Aligns auth links to the right */
+    padding-bottom: 10px; /* Adds space between top and bottom rows */
 }
 
-/* Style for the company name */
-.navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: rgb(157, 157, 157);
+.auth-links {
+    /* You can add specific styles for the auth links container if needed */
 }
-.buttons{
-    bottom: unset;
-    color: black;
+
+.navigation-item {
+    background-color: transparent; /* No background for a clean look */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navigation-item:hover,
+.navigation-item:focus {
+    background-color: #555; /* Darker background on hover/focus */
+}
+
+.navigation-link {
+    text-decoration: none; /* Removes underline from links */
+    margin-right: 15px; /* Spacing between auth links */
+}
+
+.special {
+/* Specific styles for special buttons, like Logout */
+    background-color: #f44336; /* Red color for logout for emphasis */
+    color: white;
+}
+
+.special:hover,
+.special:focus {
+    background-color: #d32f2f; /* Darker red on hover/focus */
+}
+
+/* Bottom Row Styles */
+.navbar-nav {
+    display: flex;
+    justify-content: flex-start; /* Aligns navigation buttons to the left */
+}
+
+.navbar-nav .Channel button,
+.navbar-nav .home button {
+    background-color: #4CAF50; /* Green background for buttons */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 10px; /* Spacing between buttons */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-nav .Channel button:hover,
+.navbar-nav .home button:hover {
+    background-color: #388E3C; /* Darker green on hover */
+}
+
+/* Link reset */
+.navbar-nav a {
+    text-decoration: none; /* Removes underline from links */
 }

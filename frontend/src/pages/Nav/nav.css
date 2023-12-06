@@ -56,8 +56,18 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    
 }
+
 
 .button:hover {
     background-color: #0056b3; /* Darker blue on hover */
+}
+
+.join-us {
+    background-color: #ff0000; /* Red background color */
+}
+
+.join-us:hover {
+    background-color: #cc0000; /* Darker red on hover */
 }
