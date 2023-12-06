@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-//import './Comment.css';
+import './Comment.css';
 
 const Comment = ({ postId, username }) => {
   const [comments, setComments] = useState([]);
